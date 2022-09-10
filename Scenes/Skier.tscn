@@ -1,0 +1,222 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Scenes/Skier.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 1.875, 5.1875 )
+
+[sub_resource type="PhysicsMaterial" id=3]
+friction = 0.02
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 1, 4 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 5, 1 )
+
+[sub_resource type="PhysicsMaterial" id=8]
+friction = 2.0
+rough = true
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 1.5, 4 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 2.84099, 0.853553 )
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 2, 0.364 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 2, 2 )
+
+[node name="Skier" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="HairBack" type="RigidBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+mass = 0.00102041
+gravity_scale = 0.5
+linear_damp = 1.0
+
+[node name="Polygon2D" type="Polygon2D" parent="HairBack"]
+position = Vector2( -16, -22 )
+color = Color( 0.0980392, 0.454902, 0.576471, 1 )
+polygon = PoolVector2Array( 1, -2, 5, -2, 5, 7, 1, 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HairBack"]
+position = Vector2( -13, -19 )
+shape = SubResource( 10 )
+
+[node name="Ski" type="RigidBody2D" parent="."]
+physics_material_override = SubResource( 3 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Ski"]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 12, 0, 11, 1, -16, 1, -16, 0 )
+
+[node name="Clasp2" type="PinJoint2D" parent="Ski"]
+node_a = NodePath("..")
+node_b = NodePath("../../LowerLeg")
+
+[node name="Clasp1" type="PinJoint2D" parent="Ski"]
+position = Vector2( -6, 0 )
+node_a = NodePath("..")
+node_b = NodePath("../../LowerLeg")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ski"]
+polygon = PoolVector2Array( -16, 0, 12, 0, 7, 1, -15, 1 )
+
+[node name="LowerLeg" type="RigidBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LowerLeg"]
+position = Vector2( -5, -4 )
+shape = SubResource( 2 )
+
+[node name="Polygon2D" type="Polygon2D" parent="LowerLeg"]
+color = Color( 0.862745, 0.545098, 0.337255, 1 )
+polygon = PoolVector2Array( -6, -8, -4, -8, -4, 0, -6, 0 )
+
+[node name="PinJoint2D" type="PinJoint2D" parent="LowerLeg"]
+position = Vector2( -5, -8 )
+node_a = NodePath("..")
+node_b = NodePath("../../UpperLeg")
+softness = 0.1
+
+[node name="DampedSpringJoint2D" type="DampedSpringJoint2D" parent="LowerLeg"]
+position = Vector2( -9, -9 )
+rotation = -0.785398
+node_a = NodePath("..")
+node_b = NodePath("../../UpperLeg")
+length = 3.0
+rest_length = 2.0
+damping = 16.0
+
+[node name="PinJoint2D2" type="PinJoint2D" parent="LowerLeg"]
+position = Vector2( -6, -9 )
+node_a = NodePath("..")
+node_b = NodePath("../../UpperLeg")
+softness = 0.08
+
+[node name="UpperLeg" type="RigidBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperLeg"]
+position = Vector2( -9, -9 )
+shape = SubResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Polygon2D" type="Polygon2D" parent="UpperLeg"]
+color = Color( 0.862745, 0.470588, 0.654902, 1 )
+polygon = PoolVector2Array( -14, -10, -4, -10, -4, -8, -14, -8 )
+
+[node name="Camera2D" type="Camera2D" parent="UpperLeg"]
+offset = Vector2( 0, -100 )
+current = true
+zoom = Vector2( 0.5, 0.5 )
+
+[node name="PinJoint2D3" type="PinJoint2D" parent="UpperLeg"]
+position = Vector2( -13, -10 )
+node_a = NodePath("..")
+node_b = NodePath("../../Torso")
+softness = 0.1
+
+[node name="PinJoint2D" type="PinJoint2D" parent="UpperLeg"]
+position = Vector2( -11, -10 )
+node_a = NodePath("..")
+node_b = NodePath("../../Torso")
+softness = 0.1
+
+[node name="Torso" type="RigidBody2D" parent="."]
+physics_material_override = SubResource( 8 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Torso"]
+position = Vector2( -12.5, -14 )
+shape = SubResource( 5 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Torso"]
+color = Color( 0.619608, 0.509804, 0.780392, 1 )
+polygon = PoolVector2Array( -14, -18, -11, -18, -11, -10, -14, -10 )
+
+[node name="PinJoint2D" type="PinJoint2D" parent="Torso"]
+position = Vector2( -13, -17 )
+node_a = NodePath("..")
+node_b = NodePath("../../UpperArm")
+softness = 1.0
+
+[node name="PinJoint2D2" type="PinJoint2D" parent="Torso"]
+position = Vector2( -13, -19 )
+node_a = NodePath("..")
+node_b = NodePath("../../Head")
+softness = 2.0
+
+[node name="PinJoint2D3" type="PinJoint2D" parent="Torso"]
+position = Vector2( -12, -19 )
+node_a = NodePath("..")
+node_b = NodePath("../../Head")
+softness = 1.0
+
+[node name="UpperArm" type="RigidBody2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperArm"]
+position = Vector2( -11.5089, -15.5089 )
+rotation = 0.785398
+shape = SubResource( 6 )
+
+[node name="Polygon2D" type="Polygon2D" parent="UpperArm"]
+position = Vector2( 2, -9 )
+rotation = -0.785398
+color = Color( 0.509804, 0.705882, 0.839216, 1 )
+polygon = PoolVector2Array( -6, -17, -4, -17, -4, -11, -6, -11 )
+
+[node name="PinJoint2D" type="PinJoint2D" parent="UpperArm"]
+position = Vector2( -9.5, -13.5 )
+node_a = NodePath("..")
+node_b = NodePath("../../Forearm")
+softness = 0.3
+
+[node name="PinJoint2D2" type="PinJoint2D" parent="UpperArm"]
+position = Vector2( -10, -15 )
+node_a = NodePath("..")
+node_b = NodePath("../../Forearm")
+softness = 0.2
+
+[node name="Forearm" type="RigidBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+mass = 0.408163
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Forearm"]
+position = Vector2( -8.40533, -15.5947 )
+rotation = -0.785398
+shape = SubResource( 9 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Forearm"]
+position = Vector2( -1, -3 )
+rotation = -0.785398
+color = Color( 0.486275, 0.72549, 0.756863, 1 )
+polygon = PoolVector2Array( 1, -15, 6, -15, 6, -14, 1, -13 )
+
+[node name="Head" type="RigidBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Head"]
+position = Vector2( -12, -21 )
+shape = SubResource( 7 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Head"]
+color = Color( 0.341176, 0.6, 0.482353, 1 )
+polygon = PoolVector2Array( -14, -23, -10, -23, -10, -19, -14, -19 )
+
+[node name="PinJoint2D" type="PinJoint2D" parent="Head"]
+position = Vector2( -12, -22 )
+node_a = NodePath("../../HairBack")
+node_b = NodePath("..")
+softness = 0.5
+
+[node name="Polygon2D2" type="Polygon2D" parent="Head"]
+color = Color( 0.0980392, 0.454902, 0.576471, 1 )
+polygon = PoolVector2Array( -10, -23, -14, -23, -14, -19 )
