@@ -3,6 +3,10 @@ var skiing : bool = false
 var finished : bool = false
 var times_button_pressed : int = 0
 var button_pressed_limit : int = 18
+
+# We keep two copies of the function entered by the player. One is for displaying LaTeX,
+# The other for evaluation as GDScript.
+
 var latex_string : String = "-x"
 var expression_string : String = "-x"
 var history = [["", ""], ["-", "-"], [latex_string, expression_string]]
@@ -35,6 +39,9 @@ func _process(_delta):
 			var _result = get_tree().reload_current_scene()
 	
 	if player_head != null:
+		# We reset the position and content of the expression indicating the distance traveled
+		# after every full pixel. This saves resources and fits nicely with the pixel art background.
+		
 		if player_head.position.x > 1950 or finished:
 			var pos = player_head.position.x
 			if abs(previous_pos - pos) > 1:
@@ -87,7 +94,6 @@ func _on_MinusButton_pressed():
 		expression_string = expression_string + "-"
 		Render()
 
-
 func _on_TwoButton_pressed():
 	if not skiing and times_button_pressed < button_pressed_limit:
 		latex_string = latex_string + "2"
@@ -127,7 +133,6 @@ func Redo():
 
 	latex.LatexExpression = "f(x) = " + latex_string
 	error_label.text = slope.calculate_shape("-(" + expression_string + ")")
-	
 	
 	latex.Render()
 
